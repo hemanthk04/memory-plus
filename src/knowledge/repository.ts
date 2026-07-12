@@ -3,7 +3,11 @@ import { knowledgeItems } from "./schema";
 import type { CreateKnowledgeInput } from "./validators";
 import { desc, eq } from "drizzle-orm";
 
-async function create(data: CreateKnowledgeInput) {
+type CreateKnowledgeRecord = CreateKnowledgeInput & {
+  embedding: number[];
+};
+
+async function create(data: CreateKnowledgeRecord) {
   const [knowledge] = await db
     .insert(knowledgeItems)
     .values(data)

@@ -1,0 +1,31 @@
+import OpenAI from "openai";
+
+import { env } from "../../config/env";
+import type {
+  EmbeddingInput,
+  EmbeddingProvider,
+} from "./types";
+
+const client = new OpenAI({
+  apiKey: env.OPENAI_API_KEY,
+});
+
+export class OpenAIEmbeddingProvider implements EmbeddingProvider {
+  async embed(input: EmbeddingInput): Promise<number[]> {
+    const response = await client.embeddings.create({
+      model: env.OPENAI_EMBEDDING_MODEL,
+      input: input.text,
+    });
+
+    return response.data[0].embedding;
+  }
+
+  async embedMany(inputs: EmbeddingInput[]): Promise<number[][]> {
+    const response = await client.embeddings.create({
+      model: env.OPENAI_EMBEDDING_MODEL,
+      input: inputs.map((item) => item.text),
+    });
+
+    return response.data.map((item) => item.embedding);
+  }
+}

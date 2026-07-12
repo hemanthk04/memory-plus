@@ -1,8 +1,13 @@
 import { knowledgeRepository } from "./repository";
 import type { CreateKnowledgeInput } from "./validators";
+import { embeddingService } from "../ai/embeddings";
 
 async function create(data: CreateKnowledgeInput) {
-  return knowledgeRepository.create(data);
+  const embedding = await embeddingService.embed(data.content);
+  return knowledgeRepository.create({
+    ...data,
+    embedding,
+  });
 }
 
 async function findAll() {

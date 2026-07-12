@@ -4,7 +4,11 @@ import {
   text,
   timestamp,
   uuid,
+  vector,
 } from "drizzle-orm/pg-core";
+
+import { EMBEDDING_DIMENSIONS } from "../ai/embeddings/constants";
+
 
 export const knowledgeItems = pgTable("knowledge_items", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -16,6 +20,10 @@ export const knowledgeItems = pgTable("knowledge_items", {
   tags: text("tags").array().notNull().default([]),
 
   metadata: jsonb("metadata").$type<Record<string, unknown>>().default({}),
+
+  embedding: vector("embedding", {
+    dimensions: EMBEDDING_DIMENSIONS,
+  }),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
 
