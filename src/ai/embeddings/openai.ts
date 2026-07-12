@@ -10,22 +10,38 @@ const client = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
 });
 
-export class OpenAIEmbeddingProvider implements EmbeddingProvider {
-  async embed(input: EmbeddingInput): Promise<number[]> {
-    const response = await client.embeddings.create({
-      model: env.OPENAI_EMBEDDING_MODEL,
-      input: input.text,
-    });
+export class OpenAIEmbeddingProvider
+  implements EmbeddingProvider {
+
+  async embed(
+    input: EmbeddingInput
+  ): Promise<number[]> {
+
+    const response =
+      await client.embeddings.create({
+        model: env.OPENAI_EMBEDDING_MODEL,
+        input: input.text,
+      });
 
     return response.data[0].embedding;
   }
 
-  async embedMany(inputs: EmbeddingInput[]): Promise<number[][]> {
-    const response = await client.embeddings.create({
-      model: env.OPENAI_EMBEDDING_MODEL,
-      input: inputs.map((item) => item.text),
-    });
+  async embedMany(
+    inputs: EmbeddingInput[]
+  ): Promise<number[][]> {
 
-    return response.data.map((item) => item.embedding);
+    if (inputs.length === 0) {
+      return [];
+    }
+
+    const response =
+      await client.embeddings.create({
+        model: env.OPENAI_EMBEDDING_MODEL,
+        input: inputs.map(({ text }) => text),
+      });
+
+    return response.data.map(
+      ({ embedding }) => embedding
+    );
   }
 }

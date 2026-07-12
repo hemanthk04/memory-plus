@@ -7,6 +7,9 @@ type CreateKnowledgeRecord = CreateKnowledgeInput & {
   embedding: number[];
 };
 
+/**
+ * Persists a knowledge item in PostgreSQL.
+ */
 async function create(data: CreateKnowledgeRecord) {
   const [knowledge] = await db
     .insert(knowledgeItems)

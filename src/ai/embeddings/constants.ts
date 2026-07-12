@@ -1,1 +1,4 @@
-export const EMBEDDING_DIMENSIONS = 1536;
+export const EMBEDDING_MODEL = {
+  name: "text-embedding-3-small",
+  dimensions: 1536,
+} as const;

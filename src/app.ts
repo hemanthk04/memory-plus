@@ -1,6 +1,8 @@
 import { Hono } from "hono";
 
 import knowledge from "./knowledge/route";
+import retrieval from "./retrieval/routes";
+
 
 const app = new Hono();
 
@@ -13,5 +15,6 @@ app.get("/health", (c) => {
 });
 
 app.route("/knowledge", knowledge);
+app.route("/recall", retrieval);
 
 export default app;

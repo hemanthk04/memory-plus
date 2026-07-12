@@ -13,5 +13,9 @@ export const env = z
     EMBEDDING_PROVIDER: z.enum(["openai"]),
 
     OPENAI_EMBEDDING_MODEL: z.string(),
+
+    DEFAULT_RECALL_LIMIT: z.coerce.number().default(5),
+
+    DEFAULT_RECALL_THRESHOLD: z.coerce.number().default(0.65),
   })
   .parse(process.env);
