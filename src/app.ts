@@ -1,5 +1,7 @@
 import { Hono } from "hono";
 
+import knowledge from "./knowledge/route";
+
 const app = new Hono();
 
 app.get("/health", (c) => {
@@ -9,5 +11,7 @@ app.get("/health", (c) => {
     version: "0.1.0",
   });
 });
+
+app.route("/knowledge", knowledge);
 
 export default app;
