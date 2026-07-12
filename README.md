@@ -11,9 +11,14 @@ An MCP-compatible AI knowledge engine that provides long-term memory for AI assi
 - Supabase
 - OpenAI Embeddings (planned)
 
-## Current Status
+## Roadmap
 
-- ✅ Create Knowledge
-- ✅ Read Knowledge
-- 🚧 Semantic Search
-- 🚧 MCP Server
+- [x] Knowledge Storage
+- [x] AI Embeddings
+- [ ] Semantic Recall
+- [ ] MCP Server
+- [ ] Memory Layers
+- [ ] Importance Scoring
+- [ ] Hybrid Search
+- [ ] Multi-provider AI
+- [ ] Web Dashboard
