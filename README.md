@@ -1,67 +1,257 @@
-# Memory Plus
+# 🧠 Memory Plus
 
-An MCP-compatible AI knowledge engine that provides long-term memory for AI assistants.
+> A semantic memory engine for AI agents, powered by embeddings, PostgreSQL pgvector, and the Model Context Protocol (MCP).
 
-## Tech Stack
+Memory Plus enables AI applications to **remember**, **recall**, **update**, and **forget** information using semantic search instead of simple keyword matching. It exposes both a REST API and an MCP server, allowing LLMs like Claude Desktop to use it as an external memory system.
 
-- Hono
+---
+
+## ✨ Features
+
+- 🧠 Semantic memory using OpenAI embeddings
+- 🔍 Vector similarity search with PostgreSQL + pgvector
+- 💾 Persistent long-term memory
+- 🔄 Automatic memory updates based on semantic similarity
+- 🗑️ Soft-delete (Forget) with archival support
+- 📜 Memory history preservation
+- ⚡ REST API built with Hono
+- 🔌 Model Context Protocol (MCP) support for AI assistants
+- 🧩 Clean Service / Repository architecture
+
+---
+
+## 🏗️ Architecture
+
+```
+                    +-------------------+
+                    | Claude Desktop    |
+                    | ChatGPT / Agents  |
+                    +---------+---------+
+                              |
+                              | MCP
+                              |
+                    +---------v---------+
+                    | Memory Plus MCP   |
+                    +---------+---------+
+                              |
+                              |
+                    +---------v---------+
+                    | Memory Service    |
+                    +---------+---------+
+                              |
+            +-----------------+-----------------+
+            |                                   |
+            |                                   |
++-----------v-----------+           +-----------v-----------+
+| Knowledge Service     |           | Retrieval Service     |
++-----------+-----------+           +-----------+-----------+
+            |                                   |
+            +-----------------+-----------------+
+                              |
+                    +---------v---------+
+                    | PostgreSQL        |
+                    | pgvector          |
+                    +---------+---------+
+                              |
+                    +---------v---------+
+                    | OpenAI Embeddings |
+                    +-------------------+
+```
+
+---
+
+# 📦 Tech Stack
+
 - TypeScript
+- Hono
 - Drizzle ORM
 - PostgreSQL
-- Supabase
-- OpenAI Embeddings (planned)
+- pgvector
+- OpenAI Embeddings
+- Zod
+- MCP SDK
 
-## Roadmap
+---
+
+# 🚀 Getting Started
+
+## Clone
+
+```bash
+git clone https://github.com/hemanthk04/memory-plus.git
+
+cd memory-plus
+```
+
+## Install
+
+```bash
+pnpm install
+```
+
+## Configure
+
+Create a `.env`
+
+```env
+DATABASE_URL=
+
+OPENAI_API_KEY=
+
+EMBEDDING_PROVIDER=openai
+OPENAI_EMBEDDING_MODEL=text-embedding-3-small
+
+DEFAULT_RECALL_LIMIT=5
+DEFAULT_RECALL_THRESHOLD=0.65
+
+MEMORY_UPDATE_THRESHOLD=0.45
+MEMORY_FORGET_THRESHOLD=0.65
+```
+
+## Database
+
+```bash
+pnpm db:migrate
+```
+
+## Run
+
+```bash
+pnpm dev
+```
+
+---
+
+# 🔌 REST API
+
+## Remember
+
+```http
+POST /memory
+```
+
+```json
+{
+  "content": "My favourite coffee is Blue Tokai.",
+  "category": "preference",
+  "tags": ["coffee"]
+}
+```
+
+---
+
+## Recall
+
+```http
+POST /recall
+```
+
+```json
+{
+  "query": "What's my favourite coffee?"
+}
+```
+
+---
+
+## Forget
+
+```http
+POST /memory/forget
+```
+
+```json
+{
+  "query": "Blue Tokai"
+}
+```
+
+---
+
+# 🤖 MCP Support
+
+Memory Plus can be connected directly to AI assistants supporting the **Model Context Protocol**.
+
+Available tools:
+
+- remember
+- recall
+- forget
+- knowledge
+
+Example:
+
+```
+Remember that my favourite coffee is Blue Tokai.
+
+↓
+
+Claude calls
+
+memory-plus:remember
+
+↓
+
+Memory stored
+
+↓
+
+Later...
+
+What's my favourite coffee?
+
+↓
+
+Claude calls
+
+memory-plus:recall
+
+↓
+
+Blue Tokai
+```
+
+---
+
+# 📂 Project Structure
+
+```
+src
+ ├── ai
+ ├── config
+ ├── db
+ ├── knowledge
+ ├── memory
+ ├── retrieval
+ ├── mcp
+ └── shared
+```
+
+---
+
+# 🛣️ Roadmap
 
 - [x] Knowledge Storage
-- [x] AI Embeddings
-- [ ] Semantic Recall
-- [ ] MCP Server
-- [ ] Memory Layers
-- [ ] Importance Scoring
-- [ ] Hybrid Search
-- [ ] Multi-provider AI
-- [ ] Web Dashboard
+- [x] Semantic Recall
+- [x] Automatic Memory Update
+- [x] Memory History
+- [x] Forget (Soft Delete)
+- [x] MCP Server
+- [x] Playwright API Tests
+- [ ] Docker Support
+- [ ] Memory Dashboard
+- [ ] Multi-provider Embeddings
 
-## MCP server
+---
 
-Memory Plus includes a local stdio MCP server for MCP clients such as Claude Desktop. The server exposes four tools:
+# 📄 License
 
-- `remember`: store a memory using the existing intelligent remember workflow.
-- `recall`: find semantically similar active memories.
-- `forget`: archive a memory by its ID.
-- `knowledge`: retrieve one memory by its ID.
+MIT
 
-The MCP layer delegates to the existing Memory Plus services; it does not access the database or reimplement memory behavior.
+---
 
-### Claude Desktop
+# 👨‍💻 Author
 
-1. Install dependencies and build the project:
+**Hemanth Kapalavai**
 
-   ```bash
-   pnpm install
-   pnpm build
-   ```
-
-2. Add a `memory-plus` entry to Claude Desktop's MCP configuration. Replace the project path and provide the same environment variables used by the API:
-
-   ```json
-   {
-     "mcpServers": {
-       "memory-plus": {
-         "command": "node",
-         "args": ["C:/path/to/memory-plus/dist/src/mcp/server.js"],
-         "env": {
-           "DATABASE_URL": "<your-database-url>",
-           "OPENAI_API_KEY": "<your-openai-api-key>",
-           "EMBEDDING_PROVIDER": "openai",
-           "OPENAI_EMBEDDING_MODEL": "text-embedding-3-small"
-         }
-       }
-     }
-   }
-   ```
-
-   You can also run the server from the project directory during development with `pnpm mcp`.
-
-3. Restart Claude Desktop. Its tool picker will show the four Memory Plus tools.
+If you found this project useful, consider giving it a ⭐.
