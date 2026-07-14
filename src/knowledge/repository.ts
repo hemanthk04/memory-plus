@@ -1,7 +1,7 @@
 import { db } from "../db";
 import { knowledgeItems } from "./schema";
 import type { CreateKnowledgeInput } from "./validators";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, isNull } from "drizzle-orm";
 
 type CreateKnowledgeRecord = CreateKnowledgeInput & {
   embedding: number[];
@@ -24,6 +24,7 @@ async function findAll() {
   return db
     .select()
     .from(knowledgeItems)
+    .where(isNull(knowledgeItems.archivedAt))
     .orderBy(desc(knowledgeItems.createdAt));
 }
 

@@ -1,6 +1,6 @@
 import { db } from "../db";
 import { knowledgeItems } from "./schema";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, isNull } from "drizzle-orm";
 /**
  * Persists a knowledge item in PostgreSQL.
  */
@@ -15,6 +15,7 @@ async function findAll() {
     return db
         .select()
         .from(knowledgeItems)
+        .where(isNull(knowledgeItems.archivedAt))
         .orderBy(desc(knowledgeItems.createdAt));
 }
 async function findById(id) {

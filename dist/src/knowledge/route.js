@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
 import { knowledgeService } from "./service";
 import { createKnowledgeSchema } from "./validators";
 const knowledge = new Hono();
@@ -14,6 +15,11 @@ knowledge.get("/", async (c) => {
 });
 knowledge.get("/:id", async (c) => {
     const id = c.req.param("id");
+    if (!z.uuid().safeParse(id).success) {
+        return c.json({
+            message: "Invalid knowledge ID",
+        }, 400);
+    }
     const knowledge = await knowledgeService.findById(id);
     if (!knowledge) {
         return c.json({
