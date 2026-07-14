@@ -3,6 +3,42 @@ import { embeddingService } from "../ai/embeddings";
 import { knowledgeRepository } from "./repository";
 import type { CreateKnowledgeInput } from "./validators";
 
+interface HistoryEntry {
+  content: string;
+  updatedAt: string;
+}
+
+type KnowledgeMetadata = Record<string, unknown> & {
+  history?: HistoryEntry[];
+};
+
+/**
+ * Adds the current content to the existing chronological history while
+ * retaining metadata from both the stored record and the update payload.
+ */
+function buildMetadataWithHistory(
+  currentMetadata: Record<string, unknown> | null,
+  updatedMetadata: Record<string, unknown>,
+  previousContent: string,
+): KnowledgeMetadata {
+  const current = currentMetadata ?? {};
+  const existingHistory = Array.isArray(current.history)
+    ? (current.history as HistoryEntry[])
+    : [];
+
+  return {
+    ...current,
+    ...updatedMetadata,
+    history: [
+      ...existingHistory,
+      {
+        content: previousContent,
+        updatedAt: new Date().toISOString(),
+      },
+    ],
+  };
+}
+
 /**
  * Stores a new knowledge item and automatically generates
  * an embedding for semantic retrieval.
@@ -42,7 +78,8 @@ async function findById(id: string) {
  * Updates an existing knowledge item.
  *
  * If the content changes, a new embedding is generated
- * so semantic recall remains accurate.
+ * so semantic recall remains accurate. The prior content is appended to
+ * metadata.history, preserving a chronological record of memory versions.
  *
  * @param id Knowledge identifier.
  * @param data Updated knowledge payload.
@@ -52,11 +89,23 @@ async function update(
   id: string,
   data: CreateKnowledgeInput
 ) {
+  const currentKnowledge = await knowledgeRepository.findById(id);
+
+  if (!currentKnowledge) {
+    return null;
+  }
+
   const embedding = await embeddingService.embed(data.content);
+  const metadata = buildMetadataWithHistory(
+    currentKnowledge.metadata,
+    data.metadata,
+    currentKnowledge.content,
+  );
 
   return knowledgeRepository.update(id, {
     ...data,
     embedding,
+    metadata,
   });
 }
 

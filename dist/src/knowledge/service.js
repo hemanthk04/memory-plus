@@ -1,6 +1,27 @@
 import { embeddingService } from "../ai/embeddings";
 import { knowledgeRepository } from "./repository";
 /**
+ * Adds the current content to the existing chronological history while
+ * retaining metadata from both the stored record and the update payload.
+ */
+function buildMetadataWithHistory(currentMetadata, updatedMetadata, previousContent) {
+    const current = currentMetadata ?? {};
+    const existingHistory = Array.isArray(current.history)
+        ? current.history
+        : [];
+    return {
+        ...current,
+        ...updatedMetadata,
+        history: [
+            ...existingHistory,
+            {
+                content: previousContent,
+                updatedAt: new Date().toISOString(),
+            },
+        ],
+    };
+}
+/**
  * Stores a new knowledge item and automatically generates
  * an embedding for semantic retrieval.
  *
@@ -35,17 +56,24 @@ async function findById(id) {
  * Updates an existing knowledge item.
  *
  * If the content changes, a new embedding is generated
- * so semantic recall remains accurate.
+ * so semantic recall remains accurate. The prior content is appended to
+ * metadata.history, preserving a chronological record of memory versions.
  *
  * @param id Knowledge identifier.
  * @param data Updated knowledge payload.
  * @returns The updated knowledge record.
  */
 async function update(id, data) {
+    const currentKnowledge = await knowledgeRepository.findById(id);
+    if (!currentKnowledge) {
+        return null;
+    }
     const embedding = await embeddingService.embed(data.content);
+    const metadata = buildMetadataWithHistory(currentKnowledge.metadata, data.metadata, currentKnowledge.content);
     return knowledgeRepository.update(id, {
         ...data,
         embedding,
+        metadata,
     });
 }
 export const knowledgeService = {
