@@ -95,6 +95,13 @@ async function update(
     return null;
   }
 
+  const currentContent = currentKnowledge.content.trim().toLowerCase();
+  const updatedContent = data.content.trim().toLowerCase();
+
+  if (currentContent === updatedContent) {
+    return currentKnowledge;
+  }
+
   const embedding = await embeddingService.embed(data.content);
   const metadata = buildMetadataWithHistory(
     currentKnowledge.metadata,
