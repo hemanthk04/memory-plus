@@ -7,7 +7,7 @@ import {
   vector,
 } from "drizzle-orm/pg-core";
 
-import { EMBEDDING_DIMENSIONS } from "../ai/embeddings/constants";
+import { EMBEDDING_DIMENSIONS } from "../ai/embeddings/constants.js";
 
 
 export const knowledgeItems = pgTable("knowledge_items", {

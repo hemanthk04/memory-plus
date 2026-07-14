@@ -1,5 +1,5 @@
-import { db } from "../db";
-import { knowledgeItems } from "./schema";
+import { db } from "../db/index.js";
+import { knowledgeItems } from "./schema.js";
 import { desc, eq, isNull } from "drizzle-orm";
 /**
  * Persists a knowledge item in PostgreSQL.

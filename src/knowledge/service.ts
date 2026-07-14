@@ -1,7 +1,7 @@
-import { embeddingService } from "../ai/embeddings";
+import { embeddingService } from "../ai/embeddings/index.js";
 
-import { knowledgeRepository } from "./repository";
-import type { CreateKnowledgeInput } from "./validators";
+import { knowledgeRepository } from "./repository.js";
+import type { CreateKnowledgeInput } from "./validators.js";
 
 interface HistoryEntry {
   content: string;

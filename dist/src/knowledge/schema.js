@@ -1,5 +1,5 @@
 import { jsonb, pgTable, text, timestamp, uuid, vector, } from "drizzle-orm/pg-core";
-import { EMBEDDING_DIMENSIONS } from "../ai/embeddings/constants";
+import { EMBEDDING_DIMENSIONS } from "../ai/embeddings/constants.js";
 export const knowledgeItems = pgTable("knowledge_items", {
     id: uuid("id").defaultRandom().primaryKey(),
     content: text("content").notNull(),

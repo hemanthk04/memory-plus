@@ -1,8 +1,8 @@
-import { env } from "../config/env";
+import { env } from "../config/env.js";
 
-import { retrievalService } from "../retrieval/service";
-import { knowledgeService } from "../knowledge/service";
-import type { CreateKnowledgeInput } from "../knowledge/validators";
+import { retrievalService } from "../retrieval/service.js";
+import { knowledgeService } from "../knowledge/service.js";
+import type { CreateKnowledgeInput } from "../knowledge/validators.js";
 
 
 /**

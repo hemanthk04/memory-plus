@@ -1,5 +1,5 @@
-import { embeddingService } from "../ai/embeddings";
-import { knowledgeRepository } from "./repository";
+import { embeddingService } from "../ai/embeddings/index.js";
+import { knowledgeRepository } from "./repository.js";
 /**
  * Adds the current content to the existing chronological history while
  * retaining metadata from both the stored record and the update payload.

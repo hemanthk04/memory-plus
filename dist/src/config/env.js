@@ -1,5 +1,15 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { z } from "zod";
+const candidates = [
+    join(process.cwd(), ".env"),
+    join(process.cwd(), "../.env"),
+];
+const envPath = candidates.find(existsSync);
+if (envPath) {
+    dotenv.config({ path: envPath });
+}
 export const env = z
     .object({
     DATABASE_URL: z.string(),

@@ -1,6 +1,6 @@
-import { embeddingService } from "../ai/embeddings";
-import { env } from "../config/env";
-import { retrievalRepository } from "./repository";
+import { embeddingService } from "../ai/embeddings/index.js";
+import { env } from "../config/env.js";
+import { retrievalRepository } from "./repository.js";
 /**
  * Recalls the most semantically relevant knowledge
  * for a natural-language query.

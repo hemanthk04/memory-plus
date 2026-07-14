@@ -1,8 +1,8 @@
 import { sql } from "drizzle-orm";
 
-import { db } from "../db";
-import { knowledgeItems } from "../knowledge/schema";
-import { toPgVector } from "../shared/pgvector";
+import { db } from "../db/index.js";
+import { knowledgeItems } from "../knowledge/schema.js";
+import { toPgVector } from "../shared/pgvector.js";
 
 /**
  * Finds the most semantically similar knowledge items

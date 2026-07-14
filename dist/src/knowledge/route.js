@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
-import { knowledgeService } from "./service";
-import { createKnowledgeSchema } from "./validators";
+import { knowledgeService } from "./service.js";
+import { createKnowledgeSchema } from "./validators.js";
 const knowledge = new Hono();
 knowledge.post("/", zValidator("json", createKnowledgeSchema), async (c) => {
     const body = c.req.valid("json");

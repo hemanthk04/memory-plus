@@ -1,4 +1,4 @@
-import { createEmbeddingProvider } from "./factory";
+import { createEmbeddingProvider } from "./factory.js";
 
 const provider = createEmbeddingProvider();
 

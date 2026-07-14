@@ -1,1 +1,1 @@
-export type { EmbeddingProvider } from "./types";
+export type { EmbeddingProvider } from "./types.js";

@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 
-import knowledge from "./knowledge/route";
-import retrieval from "./retrieval/routes";
-import memory from "./memory/routes";
+import knowledge from "./knowledge/route.js";
+import retrieval from "./retrieval/routes.js";
+import memory from "./memory/routes.js";
 
 
 const app = new Hono();

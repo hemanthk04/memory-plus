@@ -1,9 +1,9 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 
-import { memoryService } from "./services";
-import { forgetSchema } from "./forget.validator";
-import { rememberSchema } from "./validator";
+import { memoryService } from "./services.js";
+import { forgetSchema } from "./forget.validator.js";
+import { rememberSchema } from "./validator.js";
 
 const memory = new Hono();
 

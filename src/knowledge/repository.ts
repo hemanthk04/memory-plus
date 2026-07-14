@@ -1,6 +1,6 @@
-import { db } from "../db";
-import { knowledgeItems } from "./schema";
-import type { CreateKnowledgeInput } from "./validators";
+import { db } from "../db/index.js";
+import { knowledgeItems } from "./schema.js";
+import type { CreateKnowledgeInput } from "./validators.js";
 import { desc, eq, isNull } from "drizzle-orm";
 
 type CreateKnowledgeRecord = CreateKnowledgeInput & {

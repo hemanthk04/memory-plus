@@ -1,6 +1,6 @@
-import { env } from "../config/env";
-import { retrievalService } from "../retrieval/service";
-import { knowledgeService } from "../knowledge/service";
+import { env } from "../config/env.js";
+import { retrievalService } from "../retrieval/service.js";
+import { knowledgeService } from "../knowledge/service.js";
 /**
  * Remembers new information.
  *

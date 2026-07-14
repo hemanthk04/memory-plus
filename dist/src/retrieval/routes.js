@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
-import { retrievalService } from "./service";
-import { recallSchema } from "./validator";
+import { retrievalService } from "./service.js";
+import { recallSchema } from "./validator.js";
 const retrieval = new Hono();
 retrieval.post("/", zValidator("json", recallSchema), async (c) => {
     const body = c.req.valid("json");

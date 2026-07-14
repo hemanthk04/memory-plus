@@ -1,10 +1,10 @@
 import OpenAI from "openai";
 
-import { env } from "../../config/env";
+import { env } from "../../config/env.js";
 import type {
   EmbeddingInput,
   EmbeddingProvider,
-} from "./types";
+} from "./types.js";
 
 const client = new OpenAI({
   apiKey: env.OPENAI_API_KEY,
