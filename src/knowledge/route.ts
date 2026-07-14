@@ -1,9 +1,8 @@
 import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 
-import { knowledgeService, recallService } from "./service";
+import { knowledgeService } from "./service";
 import { createKnowledgeSchema } from "./validators";
-import { recallSchema } from "./recall.validator";
 
 const knowledge = new Hono();
 
@@ -41,20 +40,5 @@ knowledge.get("/:id", async (c) => {
 
   return c.json(knowledge);
 });
-
-knowledge.post(
-  "/recall",
-  zValidator("json", recallSchema),
-  async (c) => {
-    const body = c.req.valid("json");
-
-    const result = await recallService.recall(
-      body.query,
-      body.limit
-    );
-
-    return c.json(result);
-  }
-);
 
 export default knowledge;

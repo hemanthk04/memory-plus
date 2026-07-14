@@ -7,6 +7,7 @@ type CreateKnowledgeRecord = CreateKnowledgeInput & {
   embedding: number[];
 };
 
+type UpdateKnowledgeRecord = Partial<CreateKnowledgeRecord>;
 /**
  * Persists a knowledge item in PostgreSQL.
  */
@@ -35,8 +36,25 @@ async function findById(id: string) {
   return knowledge ?? null;
 }
 
+async function update(
+  id: string,
+  data: UpdateKnowledgeRecord
+) {
+  const [knowledge] = await db
+    .update(knowledgeItems)
+    .set({
+      ...data,
+      updatedAt: new Date(),
+    })
+    .where(eq(knowledgeItems.id, id))
+    .returning();
+
+  return knowledge ?? null;
+}
+
 export const knowledgeRepository = {
   create,
   findAll,
   findById,
+  update,
 };

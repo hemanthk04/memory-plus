@@ -4,16 +4,13 @@ import { db } from "../db";
 import { knowledgeItems } from "../knowledge/schema";
 import { toPgVector } from "../shared/pgvector";
 
-
 /**
  * Finds the most semantically similar knowledge items
  * using PostgreSQL pgvector cosine similarity.
  */
-
 async function findSimilar(
   embedding: number[],
-  limit: number,
-  threshold = 0.65
+  limit: number
 ) {
   const vector = toPgVector(embedding);
 
@@ -33,8 +30,6 @@ async function findSimilar(
     .from(knowledgeItems)
     .where(sql`
       ${knowledgeItems.embedding} IS NOT NULL
-      AND
-      1 - (${knowledgeItems.embedding} <=> ${vector}::vector) >= ${threshold}
     `)
     .orderBy(sql`${knowledgeItems.embedding} <=> ${vector}::vector`)
     .limit(limit);

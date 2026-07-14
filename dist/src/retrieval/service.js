@@ -1,8 +1,6 @@
 import { embeddingService } from "../ai/embeddings";
 import { env } from "../config/env";
-
 import { retrievalRepository } from "./repository";
-
 /**
  * Recalls the most semantically relevant knowledge
  * for a natural-language query.
@@ -13,18 +11,10 @@ import { retrievalRepository } from "./repository";
  * @param query Natural-language search query.
  * @param limit Maximum number of results.
  */
-async function recall(
-  query: string,
-  limit = env.DEFAULT_RECALL_LIMIT
-) {
-  const embedding = await embeddingService.embed(query);
-
-  return retrievalRepository.findSimilar(
-    embedding,
-    limit
-  );
+async function recall(query, limit = env.DEFAULT_RECALL_LIMIT) {
+    const embedding = await embeddingService.embed(query);
+    return retrievalRepository.findSimilar(embedding, limit);
 }
-
 export const retrievalService = {
-  recall,
+    recall,
 };
