@@ -35,9 +35,23 @@ async function update(id, data) {
         .returning();
     return knowledge ?? null;
 }
+/**
+ * Marks a knowledge item as archived without changing its content or metadata.
+ */
+async function archive(id) {
+    const [knowledge] = await db
+        .update(knowledgeItems)
+        .set({
+        archivedAt: new Date(),
+    })
+        .where(eq(knowledgeItems.id, id))
+        .returning();
+    return knowledge ?? null;
+}
 export const knowledgeRepository = {
     create,
     findAll,
     findById,
     update,
+    archive,
 };

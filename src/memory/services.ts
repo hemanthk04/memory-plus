@@ -29,6 +29,28 @@ async function remember(data: CreateKnowledgeInput) {
   return knowledgeService.create(data);
 }
 
+/**
+ * Archives the most semantically relevant active memory for a query.
+ *
+ * @param query Natural-language description of the memory to forget.
+ * @returns The archived memory if found, otherwise null.
+ */
+async function forget(query: string) {
+  const matches = await retrievalService.recall(query, 1);
+  const bestMatch = matches[0];
+
+  if (
+    !bestMatch ||
+    bestMatch.score === null ||
+    bestMatch.score < env.MEMORY_FORGET_THRESHOLD
+  ) {
+    return null;
+  }
+
+  return knowledgeService.archive(bestMatch.id);
+}
+
 export const memoryService = {
   remember,
+  forget,
 };

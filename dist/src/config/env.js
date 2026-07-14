@@ -10,5 +10,6 @@ export const env = z
     DEFAULT_RECALL_LIMIT: z.coerce.number().default(5),
     DEFAULT_RECALL_THRESHOLD: z.coerce.number().default(0.65),
     MEMORY_UPDATE_THRESHOLD: z.coerce.number().default(0.45),
+    MEMORY_FORGET_THRESHOLD: z.coerce.number().default(0.65),
 })
     .parse(process.env);

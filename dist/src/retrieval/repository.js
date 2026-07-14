@@ -23,6 +23,7 @@ async function findSimilar(embedding, limit) {
         .from(knowledgeItems)
         .where(sql `
       ${knowledgeItems.embedding} IS NOT NULL
+      AND ${knowledgeItems.archivedAt} IS NULL
     `)
         .orderBy(sql `${knowledgeItems.embedding} <=> ${vector}::vector`)
         .limit(limit);

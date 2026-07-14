@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 
 import { memoryService } from "./services";
+import { forgetSchema } from "./forget.validator";
 import { rememberSchema } from "./validator";
 
 const memory = new Hono();
@@ -16,6 +17,26 @@ memory.post(
 
     return c.json(result, 201);
   }
+);
+
+memory.post(
+  "/forget",
+  zValidator("json", forgetSchema),
+  async (c) => {
+    const body = c.req.valid("json");
+    const forgotten = await memoryService.forget(body.query);
+
+    if (!forgotten) {
+      return c.json(
+        {
+          message: "No matching memory found.",
+        },
+        404,
+      );
+    }
+
+    return c.json({ forgotten });
+  },
 );
 
 export default memory;

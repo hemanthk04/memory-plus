@@ -28,4 +28,6 @@ export const knowledgeItems = pgTable("knowledge_items", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+
+  archivedAt: timestamp("archived_at"),
 });

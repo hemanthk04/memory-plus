@@ -116,9 +116,20 @@ async function update(
   });
 }
 
+/**
+ * Archives a knowledge item without deleting its stored data.
+ *
+ * @param id Knowledge identifier.
+ * @returns The archived knowledge item if found, otherwise null.
+ */
+async function archive(id: string) {
+  return knowledgeRepository.archive(id);
+}
+
 export const knowledgeService = {
   create,
   findAll,
   findById,
   update,
+  archive,
 };
